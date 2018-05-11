@@ -173,7 +173,7 @@ class Alphoid_1(Creature):
        
        self.x += self.xway
        self.y += self.yway 
-
+"""
 class Directional_Alphoid(Creature):
     def __init__(self, x, y, sprite, cathegory = None, energy = 1000, direction = None, speed = 1, turnspeed = 1, target = None):
         Creature.__init__(self, x, y, sprite, cathegory, energy)
@@ -181,12 +181,12 @@ class Directional_Alphoid(Creature):
         self.speed = speed
         self.direction = np.randon.randint(0,360) if direction == None else direction
         self.target = WorldObject(np.random.randint(0,100), np.random.randint(0,100))
-   
+
     def TurnTowards(self, p2):
-    dto = AngleTwoPoints(self,p2)
+        dto = AngleTwoPoints(self,p2)
     
-    if self.direction == dto:
-      return(True)
+        if self.direction == dto:
+            return(True)
     
     if self.direction > dto:
       if (360-self.direction)+dto < self.direction-dto:
@@ -205,7 +205,7 @@ class Directional_Alphoid(Creature):
         
         self.TurnTowards(self.target)
 
-
+"""
 # The rest is code where you implement your game using the Scenes model 
 class TitleScene(SceneBase):
     def __init__(self, x, y, contents = {}):
