@@ -3,6 +3,20 @@ import os
 import numpy as np
 import gc
 import math
+import os
+import random
+import RndShp
+import sys
+
+from pygame.locals import *
+
+if int(sys.argv[1]) != 0:
+    # TODO: Make RndShp.py callable, because for some reason the first run is always laggy
+    if not os.path.exists('Sprites'):
+        os.makedirs('Sprites')
+
+    for i in range(int(sys.argv[1])):
+        RndShp.shape_p1('Sprites/p_{}.png'.format(i))
 
 # Universal mathematical functions
 def GetDegree(deg):
@@ -63,7 +77,13 @@ class SceneBase:
 
 def run_game(width, height, fps, starting_scene, contents = {}):
     pygame.init()
-    screen = pygame.display.set_mode((width, height))
+    
+    flags = FULLSCREEN | DOUBLEBUF
+    screen = pygame.display.set_mode((width, height), flags)
+    screen.set_alpha(None) 
+
+
+
     clock = pygame.time.Clock()
 
     active_scene = starting_scene
@@ -173,7 +193,7 @@ class Alphoid_1(Creature):
        
        self.x += self.xway
        self.y += self.yway 
-"""
+
 class Directional_Alphoid(Creature):
     def __init__(self, x, y, sprite, cathegory = None, energy = 1000, direction = None, speed = 1, turnspeed = 1, target = None):
         Creature.__init__(self, x, y, sprite, cathegory, energy)
@@ -182,30 +202,30 @@ class Directional_Alphoid(Creature):
         self.direction = np.randon.randint(0,360) if direction == None else direction
         self.target = WorldObject(np.random.randint(0,100), np.random.randint(0,100))
 
+# TODO: Simplify this block! 
     def TurnTowards(self, p2):
         dto = AngleTwoPoints(self,p2)
     
         if self.direction == dto:
             return(True)
     
-    if self.direction > dto:
-      if (360-self.direction)+dto < self.direction-dto:
-        self.direction = ReAngle(self.direction+self.TurningSpeed)
-      else: 
-        self.direction = ReAngle(self.direction-self.TurningSpeed)
+        if self.direction > dto:
+            if (360-self.direction)+dto < self.direction-dto:
+                self.direction = ReAngle(self.direction+self.TurningSpeed)
+            else: 
+                self.direction = ReAngle(self.direction-self.TurningSpeed)
           
-    else: # if self.direction < dto
-      if (360-dto)+self.direction < dto-self.direction:
-        self.direction = ReAngle(self.direction-self.TurningSpeed)
-      else: 
-        self.direction = ReAngle(self.direction+self.TurningSpeed) 
+        else: # if self.direction < dto
+            if (360-dto)+self.direction < dto-self.direction:
+                self.direction = ReAngle(self.direction-self.TurningSpeed)
+            else: 
+                self.direction = ReAngle(self.direction+self.TurningSpeed) 
 
     def Step(self, world):
         super(Directional_Alphoid, self).Step(world)
         
         self.TurnTowards(self.target)
 
-"""
 # The rest is code where you implement your game using the Scenes model 
 class TitleScene(SceneBase):
     def __init__(self, x, y, contents = {}):
@@ -228,7 +248,7 @@ class TitleScene(SceneBase):
 class GameScene(SceneBase):
     def __init__(self, x, y, contents = {}):
         SceneBase.__init__(self, x, y, contents)
-
+        
     def ProcessInput(self, events, pressed_keys):
         pass
         
@@ -257,7 +277,7 @@ class GameScene(SceneBase):
 
 d_contents = {'creatures': [Alphoid_1(np.random.randint(0,840)
                            , np.random.randint(0,680)
-                           , sprite = 'p1.png'
+                           , sprite = random.choice(['Sprites/{}'.format(i) for i in os.listdir('Sprites') if '.png' in i])
                            , cathegory = 'creatures') for i in range(100)]}
 
 run_game(840, 680, 120, TitleScene(840, 680, d_contents))
